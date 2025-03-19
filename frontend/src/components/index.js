@@ -1,0 +1,5 @@
+export { default as CardPizza } from './CardPizza'
+export { default as Footer } from './Footer'
+export { default as Header } from './Header'
+export { default as MiNavbar } from './MiNavbar'
+export { default as ProtectedRoute } from './ProtectedRoute'
