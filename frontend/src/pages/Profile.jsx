@@ -1,26 +1,25 @@
-import { useCallback, useState } from 'react'
+import { useContext, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import { UserContext } from '../store/UserContext.jsx'
 
 const Profile = () => {
-  const [email, setEmail] = useState('micorreo@correo.cl')
-  const { logout } = useContext(UserContext)
-  const handleChange = (e) => {
-    setEmail(e.target.value)
-  }
+  const { user, profile, logout } = useContext(UserContext)
+
+  useEffect(() => {
+    if (!user) {
+      profile()
+    }
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
-
     logout()
 
     Swal.fire({
       title: 'Listo!',
       text: 'Su sesión se cerró correctamente.',
-      icon: 'ok'
+      icon: 'success'
     })
-
-    setEmail(email)
   }
 
   return (
@@ -34,10 +33,9 @@ const Profile = () => {
               <label className='text-gray-700 mb-1'>Correo Electrónico</label>
               <input
                 type='email'
-                value={email}
-                onChange={handleChange}
-                name='email'
+                value={user?.email || ''}
                 className='w-100 p-2 border rounded-lg'
+                disabled
               />
             </div>
 
@@ -45,7 +43,6 @@ const Profile = () => {
               <button
                 type='submit'
                 className='btn btn-primary'
-                disabled={!email}
               >
                 Cerrar sesión
               </button>

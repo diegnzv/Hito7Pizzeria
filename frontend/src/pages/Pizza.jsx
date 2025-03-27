@@ -18,7 +18,6 @@ const Pizza = () => {
   }
 
   useEffect(() => {
-    // const idpizza = 'p001'
     getPizza(id)
   }, [id])
 

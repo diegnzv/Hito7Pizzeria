@@ -1,14 +1,51 @@
 import { formateaNumero } from '../utils/utiles.js'
+import Swal from 'sweetalert2'
 import { useContext } from 'react'
 import { CartContext } from '../store/CartContext.jsx'
 import { UserContext } from '../store/UserContext.jsx'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Cart = () => {
-  const { cartItems, total, handleSumar, handleRestar } = useContext(CartContext)
+  const { cartItems, total, handleSumar, handleRestar, limpiaCart } = useContext(CartContext)
   const { token } = useContext(UserContext)
 
   const handleSubmit = (e) => {
     e.preventDefault()
+  }
+
+  const pagar = async (token, cartItems) => {
+    if (total > 0) {
+      try {
+        await axios.post('http://localhost:5000/api/checkouts',
+
+          { cart: cartItems },
+          { headers: { Authorization: `Bearer ${token}` } }
+
+        )
+
+        Swal.fire({
+          title: '¡Pago exitoso!',
+          text: 'Carrito ingresado exitosamente.',
+          icon: 'success'
+        })
+        limpiaCart()
+      } catch (error) {
+        console.error('Carrito-Error al pagar:', error)
+
+        Swal.fire({
+          title: 'Error!',
+          text: 'Hubo un problema al generar el pago.',
+          icon: 'error'
+        })
+      }
+    } else {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Carrito vacío',
+        icon: 'error'
+      })
+    }
   }
 
   return (
@@ -64,9 +101,11 @@ const Cart = () => {
 
           <div className='d-flex flex-column'>
             <button
-              type='submit'
               className='btn btn-dark' style={{ width: '90px', height: '45px', fontSize: '15px' }}
-              disabled={!token}> Pagar </button>
+              onClick={() => pagar(token, cartItems)}
+              disabled={!token}
+            >Pagar
+            </button>
           </div>
         </form>
       </div>

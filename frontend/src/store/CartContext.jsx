@@ -49,7 +49,12 @@ const CartProvider = ({ children }) => {
     })
   }
 
-  const stateGlobal = { cartItems, total, handleAgregar, handleSumar, handleRestar }
+  const limpiaCart = () => {
+    setCartItems([])
+    setTotal(0)
+  }
+
+  const stateGlobal = { cartItems, total, handleAgregar, handleSumar, handleRestar, limpiaCart }
 
   return (
     <CartContext.Provider value={stateGlobal}>{children}</CartContext.Provider>

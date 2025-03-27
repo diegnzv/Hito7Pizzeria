@@ -1,7 +1,10 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import Swal from 'sweetalert2'
+import { UserContext } from '../store/UserContext.jsx'
 
 const Register = () => {
+  const { register } = useContext(UserContext)
+
   const [ingreso, setIngreso] = useState({
     email: '',
     passw: '',
@@ -46,11 +49,7 @@ const Register = () => {
       return
     }
 
-    Swal.fire({
-      title: 'Listo!',
-      text: 'Datos ingresados correctamente.',
-      icon: 'ok'
-    })
+    register(email, passw)
 
     setIngreso({ email: '', passw: '', rpassw: '' })
   }
